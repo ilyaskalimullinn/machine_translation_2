@@ -71,7 +71,8 @@ def create_csv(
 
         lines = list(zip(src_f.readlines(), trg_f.readlines()))
 
-        lines = random.sample(lines, k=n_rows)
+        if n_rows != -1:
+            lines = random.sample(lines, k=n_rows)
 
         src_lines = [line[0].strip() for line in lines]
         trg_lines = [line[1].strip() for line in lines]
@@ -85,19 +86,19 @@ def main() -> None:
         "--data-dir",
         type=str,
         default="./DATA",
-        help="Path to the directory where dataset will be downloaded",
+        help="Path to the directory where dataset will be downloaded. Defaults to './DATA'",
     )
     parser.add_argument(
         "--sample-size",
         type=int,
         default=200_000,
-        help="Number of rows that will be added to resulting dataset. Value -1 represents that all data will be used",
+        help="Number of rows that will be added to resulting dataset. Value -1 represents that all data will be used. Defaults to 200 000",
     )
     parser.add_argument(
         "--random-seed",
         type=int,
-        default=-1,
-        help="Random seed for selecting sample_size rows from dataset. Value -1 represents that seed will not be set",
+        default=42,
+        help="Random seed for selecting sample_size rows from dataset. Value -1 represents that seed will not be set. Defaults to 42",
     )
 
     args = vars(parser.parse_args())
@@ -108,15 +109,15 @@ def main() -> None:
     csv_path = os.path.join(data_dir, CSV_NAME)
 
     zip_path = os.path.join(data_dir, ZIP_FILE_NAME)
-    download(download_path=zip_path)
-    extract_zip(
-        zip_path=zip_path,
-        zip_src_name=ZIP_SRC_NAME,
-        zip_trg_name=ZIP_TRG_NAME,
-        data_dir=data_dir,
-        src_path=src_path,
-        trg_path=trg_path,
-    )
+    # download(download_path=zip_path)
+    # extract_zip(
+    #     zip_path=zip_path,
+    #     zip_src_name=ZIP_SRC_NAME,
+    #     zip_trg_name=ZIP_TRG_NAME,
+    #     data_dir=data_dir,
+    #     src_path=src_path,
+    #     trg_path=trg_path,
+    # )
     if args["random_seed"] != -1:
         random.seed(args["random_seed"])
     create_csv(
