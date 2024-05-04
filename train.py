@@ -36,11 +36,14 @@ def train_epoch(
         # (B, T, vocab_size), predictions for every token
         pred = model(src, trg, src_mask, trg_mask)
 
-        # (B * (T - 1), vocab_size), predictions for every token except for last
-        pred = pred[:, :-1, :].reshape(-1, pred.shape[2])
+        # (B, T, vocab_size), predictions for every token
+        pred = model(src, trg, src_mask, trg_mask)
 
-        # (B * (T - 1)), starting with second token
-        trg = trg[:, 1:].reshape(-1)
+        # (B, vocab_size, T - 1), predictions for every token except for last
+        pred = pred[:, :-1, :].permute(0, 2, 1)
+
+        # (B, T - 1), starting with second token
+        trg = trg[:, 1:]
 
         loss = criterion(pred, trg)
 
@@ -78,11 +81,11 @@ def validate_epoch(
         # (B, T, vocab_size), predictions for every token
         pred = model(src, trg, src_mask, trg_mask)
 
-        # (B * (T - 1), vocab_size), predictions for every token except for last
-        pred = pred[:, :-1, :].reshape(-1, pred.shape[2])
+        # (B, vocab_size, T - 1), predictions for every token except for last
+        pred = pred[:, :-1, :].permute(0, 2, 1)
 
-        # (B * (T - 1)), starting with second token
-        trg = trg[:, 1:].reshape(-1)
+        # (B, T - 1), starting with second token
+        trg = trg[:, 1:]
 
         loss = criterion(pred, trg)
 
