@@ -109,15 +109,15 @@ def main() -> None:
     csv_path = os.path.join(data_dir, CSV_NAME)
 
     zip_path = os.path.join(data_dir, ZIP_FILE_NAME)
-    # download(download_path=zip_path)
-    # extract_zip(
-    #     zip_path=zip_path,
-    #     zip_src_name=ZIP_SRC_NAME,
-    #     zip_trg_name=ZIP_TRG_NAME,
-    #     data_dir=data_dir,
-    #     src_path=src_path,
-    #     trg_path=trg_path,
-    # )
+    download(download_path=zip_path)
+    extract_zip(
+        zip_path=zip_path,
+        zip_src_name=ZIP_SRC_NAME,
+        zip_trg_name=ZIP_TRG_NAME,
+        data_dir=data_dir,
+        src_path=src_path,
+        trg_path=trg_path,
+    )
     if args["random_seed"] != -1:
         random.seed(args["random_seed"])
     create_csv(
